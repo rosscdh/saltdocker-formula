@@ -1,0 +1,24 @@
+{%- from "saltdocker/map.jinja" import config with context %}
+[Unit]
+Description=Alcali Web UI for Saltstack
+After=docker.service
+Requires=docker.service
+After=saltmaster.service
+Requires=saltmaster.service
+After=alcali-mariadb.service
+Requires=alcali-mariadb.service
+
+[Service]
+TimeoutStartSec=5
+EnvironmentFile={{ config.location }}/alcali.env
+User=saltmaster
+Group=saltmaster
+Restart=always
+ExecStartPre=-/usr/bin/docker stop alcali
+# ExecStartPre=-/usr/bin/docker rm alcali
+# ExecStartPre=/usr/bin/docker pull {{ config.docker.alcali }}
+ExecStart=/usr/bin/docker run --rm --env-file {{ config.location }}/alcali.env -p 8008:8000 --name alcali --hostname alcali --link salt --link mariadb --entrypoint gunicorn {{ config.docker.alcali }} config.wsgi:application -c /opt/alcali/code/docker/gunicorn_config.py -b 0.0.0.0:8000
+#ExecStart=/usr/bin/docker run --rm --env-file {{ config.location }}/alcali.env -p 8008:8000 --name alcali --hostname alcali --link salt --link mariadb --entrypoint python {{ config.docker.alcali }} manage.py runserver 0.0.0.0:8000
+
+[Install]
+WantedBy=multi-user.target
