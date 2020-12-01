@@ -2,7 +2,7 @@
 driver:
   name: docker
   use_sudo: false
-  privileged: false
+  privileged: true
 
 provisioner:
   name: salt_solo
@@ -19,9 +19,6 @@ provisioner:
 
 platforms:
 - name: debian
-  driver:
-    provision_command:
-      - mkdir -p /run/systemd && echo 'docker' > /run/systemd/container
   driver_config:
     image: debian
 

@@ -11,10 +11,6 @@ saltdocker_systemd_service:
     - user: root
     - group: root
     - mode: 644
-    - context:
-        saltdocker_user: {{ config.user.name }}
-        saltdocker_group: {{ config.group.name }}
-        saltdocker_limit_nofile: {{ config.limit_nofile }}
 
 alcali_systemd_service:
   file.managed:
@@ -24,10 +20,6 @@ alcali_systemd_service:
     - user: root
     - group: root
     - mode: 644
-    - context:
-        saltdocker_user: {{ config.user.name }}
-        saltdocker_group: {{ config.group.name }}
-        saltdocker_limit_nofile: {{ config.limit_nofile }}
 
 alcali_mariadb_systemd_service:
   file.managed:
@@ -37,16 +29,13 @@ alcali_mariadb_systemd_service:
     - user: root
     - group: root
     - mode: 644
-    - context:
-        saltdocker_user: {{ config.user.name }}
-        saltdocker_group: {{ config.group.name }}
-        saltdocker_limit_nofile: {{ config.limit_nofile }}
 
-
-saltdocker_enable_service:
+{% for service in ["alcali-mariadb", "saltmaster", "alcali"] %}
+{{ service }}_enable_service:
   service.enabled:
-    - name: saltdocker
+    - name: {{ service }}
 
-saltdocker_start_service:
+{{ service }}_start_service:
   service.running:
-    - name: saltdocker
+    - name: {{ service }}
+{% endfor %}

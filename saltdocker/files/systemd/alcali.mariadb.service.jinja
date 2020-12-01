@@ -8,12 +8,10 @@ Requires=docker.service
 [Service]
 TimeoutStartSec=0
 EnvironmentFile=/home/saltmaster/alcali.env
-User=saltmaster
-Group=saltmaster
+User={{ config.user.name }}
+Group={{ config.group.name }}
 Restart=always
 ExecStartPre=-/usr/bin/docker stop mariadb
-# ExecStartPre=-/usr/bin/docker rm mariadb
-# ExecStartPre=/usr/bin/docker pull {{ config.docker.mariadb }}
 ExecStart=/usr/bin/docker run --rm --env-file {{ config.location }}/alcali.env -v {{ config.location }}/mariadb/data:/var/lib/mysql -p 3306:3306 --name mariadb --hostname mariadb {{ config.docker.mariadb }}
 
 [Install]

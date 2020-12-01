@@ -3,23 +3,19 @@
 #}
 {%- from "saltdocker/map.jinja" import config with context %}
 
-saltdocker_python-pip:
-  pkg.installed:
-  - name: python-pip
-
-saltdocker_install_docker:
-  pip.installed:
-  - name: docker
-  - require:
-    - pkg: python-pip
+gpg:
+  pkg.installed
 
 saltdocker_make_dirs:
   file.directory:
   - makedirs: True
+  - user: {{ config.user.name }}
+  - group: {{ config.group.name }}
+  - mode: 644
   - names:
     - {{ config.location }}
     - {{ config.location }}/auth
-    - {{ config.location }}/master.d
+    - {{ config.location }}/master.d/gpgkeys
     - {{ config.location }}/pillar
     - {{ config.location }}/pki
     - {{ config.location }}/roster
@@ -31,10 +27,8 @@ saltdocker_make_dirs:
 
 {{ config.location }}/saltmaster.env:
   file.managed:
-  - contents: |-
-    {{ config.env.saltmaster }}
+  - contents_pillar: saltdocker:env:saltmaster
 
 {{ config.location }}/alcali.env:
   file.managed:
-  - contents: |-
-    {{ config.env.alcali }}
+  - contents_pillar: saltdocker:env:alcali

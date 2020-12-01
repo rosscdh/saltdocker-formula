@@ -11,12 +11,10 @@ Requires=alcali-mariadb.service
 [Service]
 TimeoutStartSec=5
 EnvironmentFile={{ config.location }}/alcali.env
-User=saltmaster
-Group=saltmaster
+User={{ config.user.name }}
+Group={{ config.group.name }}
 Restart=always
 ExecStartPre=-/usr/bin/docker stop alcali
-# ExecStartPre=-/usr/bin/docker rm alcali
-# ExecStartPre=/usr/bin/docker pull {{ config.docker.alcali }}
 ExecStart=/usr/bin/docker run --rm --env-file {{ config.location }}/alcali.env -p 8008:8000 --name alcali --hostname alcali --link salt --link mariadb --entrypoint gunicorn {{ config.docker.alcali }} config.wsgi:application -c /opt/alcali/code/docker/gunicorn_config.py -b 0.0.0.0:8000
 #ExecStart=/usr/bin/docker run --rm --env-file {{ config.location }}/alcali.env -p 8008:8000 --name alcali --hostname alcali --link salt --link mariadb --entrypoint python {{ config.docker.alcali }} manage.py runserver 0.0.0.0:8000
 

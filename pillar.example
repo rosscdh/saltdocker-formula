@@ -1,11 +1,43 @@
 saltdocker:
+
   docker:
     image: rosscdh/salt-with-gitfs:latest
     alcali: latenighttales/alcali:latest
     mariadb: mariadb:latest
+
+  location: /opt/saltdocker
 
   user:
     name: salt
 
   group:
     name: salt
+
+  env:
+    saltmaster: |-
+      SALT_SHARED_SECRET=1456411231456486948989
+      TZ='Europe/Berlin'
+      UID=$(id -u)
+      GID=$(id -g)
+
+    alcali: |-
+      MYSQL_DATABASE=salt
+      MYSQL_ROOT_PASSWORD=!£RUVjfdsjfosofsdo
+      MYSQL_USER=alcali
+      MYSQL_PASSWORD=alcali
+      PYTHONUNBUFFERED=true
+
+      DB_BACKEND=mysql
+      DB_NAME=salt
+      DB_USER=alcali
+      DB_PASS=alcali
+      DB_HOST=mariadb
+      DB_PORT=3306
+
+      SECRET_KEY=F@0vjom2=40=2p42[gfsa@$$]
+      ALLOWED_HOSTS=*
+      MASTER_MINION_ID=''
+      DJANGO_DEBUG=true
+
+      SALT_URL=https://salt:8000
+      SALT_AUTH=alcali

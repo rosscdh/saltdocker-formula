@@ -11,12 +11,10 @@ Requires=alcali-mariadb.service
 [Service]
 TimeoutStartSec=0
 EnvironmentFile={{ config.location }}/saltmaster.env
-User=saltmaster
-Group=saltmaster
+User={{ config.user.name }}
+Group={{ config.group.name }}
 Restart=always
 ExecStartPre=-/usr/bin/docker stop salt
-# ExecStartPre=-/usr/bin/docker rm salt
-# ExecStartPre=/usr/bin/docker pull {{ docker_image }}
 ExecStart=/usr/bin/docker run --rm --env-file {{ config.location }}/saltmaster.env -p 4505:4505 -p 4506:4506 -p 8000:8000 -v {{ config.location }}/roster/pi.zap.sls:/etc/salt/roster -v {{ config.location }}/pki:/etc/salt/pki -v {{ config.location }}/runners:/srv/salt/runners -v {{ config.location }}/auth:/srv/salt/auth -v {{ config.location }}/salt-master-cache:/var/cache/salt/master -v {{ config.location }}/states:/srv/salt -v {{ config.location }}/pillar:/srv/pillar -v {{ config.location }}/master.d:/etc/salt/master.d --name salt --hostname salt --link alcali-mariadb {{ docker_image }}
 
 [Install]

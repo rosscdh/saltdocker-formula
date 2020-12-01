@@ -1,8 +1,11 @@
 saltdocker:
+
   docker:
     image: rosscdh/salt-with-gitfs:latest
     alcali: latenighttales/alcali:latest
     mariadb: mariadb:latest
+
+  location: /opt/saltdocker
 
   user:
     name: salt
