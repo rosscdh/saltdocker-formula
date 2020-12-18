@@ -7,7 +7,7 @@ Requires=docker.service
 
 [Service]
 TimeoutStartSec=0
-EnvironmentFile=/home/saltmaster/alcali.env
+EnvironmentFile={{ config.location }}/alcali.env
 User={{ config.user.name }}
 Group={{ config.group.name }}
 Restart=always
